@@ -1,3 +1,5 @@
+const dynamoDB = require ('../../helpers/dynamodb');
+
 module.exports.handler = async (event, context) => {
   try {
     //throw new Error('This is an error case');

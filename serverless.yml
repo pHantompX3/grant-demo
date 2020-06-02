@@ -31,7 +31,7 @@ plugins:
 
 functions:
   sayHello:
-    handler: src/lambdas/hello.handler
+    handler: src/lambdas/hello-world/hello.handler
     events:
       - http:
           method: GET
