@@ -6,14 +6,18 @@ custom:
       migrate: true
     stages:
       - dev
+  s3:
+    host: localhost
+    directory: /tmp
 
 provider:
   name: aws
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: us-east-1
-  #environment:
-  # JOBS_TABLE: ${self:service}-${self:opt, self:provider.stage}-jobs
+  environment:
+    USER_TABLE: ${self:service}-${self:opt, self:provider.stage}-users
+    GRANT_BUCKET: ${self:service}-${self:opt, self:provider.stage}-grant
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -28,6 +32,7 @@ provider:
 plugins:
   - serverless-offline
   - serverless-dynamodb-local
+  - serverless-s3-local
 
 functions:
   sayHello:
@@ -37,7 +42,13 @@ functions:
           method: GET
           path: /grant/hello
 
-          
+  createUser:
+    handler: src/lambdas/Users/create.handler
+    events:
+      - http:
+          method: POST
+          path: /grant/api/user
+
   # deleteJob:
   #   handler: src/jobs/deleteOne.handler
   #   events:
@@ -47,18 +58,23 @@ functions:
   #         request:
   #           parameters:
   #             id: true
-# resources:
-#   Resources:
-#     JobsDynamoDBTable: #creating and defining a DB table
-#       Type: 'AWS::DynamoDB::Table'
-#       Properties:
-#         TableName: ${self:provider.environment.JOBS_TABLE}
-#         AttributeDefinitions:
-#           - AttributeName: id
-#             AttributeType: S
-#         KeySchema:
-#           - AttributeName: id
-#             KeyType: HASH
-#         ProvisionedThroughput:
-#           ReadCapacityUnits: 1
-#           WriteCapacityUnits: 1
+resources:
+  Resources:
+    UsersDynamoDBTable: #creating and defining a DB table
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:provider.environment.USER_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    GrantS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.GRANT_BUCKET}
