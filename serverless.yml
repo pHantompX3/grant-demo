@@ -47,7 +47,14 @@ functions:
     events:
       - http:
           method: POST
-          path: /grant/api/user
+          path: /grant/api/user 
+
+  loginUser:
+    handler: src/lambdas/Users/login.handler
+    events:
+      - http:
+          method: POST
+          path: /grant/api/login
 
   # deleteJob:
   #   handler: src/jobs/deleteOne.handler
@@ -65,10 +72,10 @@ resources:
       Properties:
         TableName: ${self:provider.environment.USER_TABLE}
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: email
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: email
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
