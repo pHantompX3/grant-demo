@@ -16,7 +16,8 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: us-east-1
   environment:
-    USER_TABLE: ${self:service}-${self:opt, self:provider.stage}-users
+    USER_TABLE: ${self:service}-${self:opt, self:provider.stage}-users1
+    TRANSACTION_TABLE: ${self:service}-${self:opt, self:provider.stage}-transactions
     GRANT_BUCKET: ${self:service}-${self:opt, self:provider.stage}-grant
   iamRoleStatements:
     - Effect: Allow
@@ -36,7 +37,7 @@ plugins:
 
 functions:
   sayHello:
-    handler: src/lambdas/hello-world/hello.handler
+    handler: src/lambdas/helloWorld/hello.handler
     events:
       - http:
           method: GET
@@ -56,15 +57,25 @@ functions:
           method: POST
           path: /grant/api/login
 
-  # deleteJob:
-  #   handler: src/jobs/deleteOne.handler
-  #   events:
-  #     - http:
-  #         method: DELETE
-  #         path: /jobs/{id}
-  #         request:
-  #           parameters:
-  #             id: true
+  userProfile:
+    handler: src/lambdas/Users/profile.handler
+    events:
+      - http:
+          method: GET
+          path: /grant/api/profile/{id}
+          request:
+            parameters:
+              id: true
+
+  getTransactions:
+    handler: src/lambdas/Transactions/getTransactions.handler
+    events:
+      - http:
+          method: POST
+          path: /grant/api/transaction/{id}
+          request:
+            parameters:
+              id: true
 resources:
   Resources:
     UsersDynamoDBTable: #creating and defining a DB table
@@ -76,6 +87,19 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: email
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    TransactionDynamoDBTable: 
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:provider.environment.TRANSACTION_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
