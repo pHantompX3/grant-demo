@@ -1,7 +1,10 @@
+module.exports.createParams = (body, timestamp, uuid) => {
+
 const insertParams = {
   TableName: process.env.USER_TABLE,
   Item: {
     id: uuid.v1 (),
+    email:body.email,
     phone_number: body.phone_number,
     password: body.password,
     repeat_password: body.repeat_password,
@@ -27,11 +30,10 @@ const emailScanParams = {
   ExpressionAttributeValues: {':aEmail': body.email},
 };
 
-const createParams = {
+const createUserParams = {
   emailScanParams,
   insertParams,
 };
 
-module.exports = {
-  createParams,
+  return createUserParams;
 };

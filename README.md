@@ -7,7 +7,7 @@ Basic Setup Execute:
 
       npm install nodemon -g
 
-      npm -i
+      npm i
 
 Run using: 
 

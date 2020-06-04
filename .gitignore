@@ -110,3 +110,5 @@ jspm_packages
 # Serverless directories
 .serverless
 .dynamodb
+
+/img
