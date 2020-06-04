@@ -3,10 +3,10 @@
 
 Basic Setup Execute:
 
-      sls dynamodb install
-
       npm install nodemon -g
 
+      sls dynamodb install
+      
       npm i
 
 Run using: 
