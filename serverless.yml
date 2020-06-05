@@ -67,15 +67,24 @@ functions:
             parameters:
               id: true
 
-  getTransactions:
-    handler: src/lambdas/Transactions/getTransactions.handler
+  createTransactions:
+    handler: src/lambdas/Transactions/createTransaction.handler
     events:
       - http:
           method: POST
-          path: /grant/api/transaction/{id}
+          path: /grant/api/transactions/
+
+  getTransactions:
+    handler: src/lambdas/Transactions/getAllTransactions.handler
+    events:
+      - http:
+          method: GET
+          path: /grant/api/transactions/{id}
           request:
             parameters:
               id: true
+
+
 resources:
   Resources:
     UsersDynamoDBTable: #creating and defining a DB table
