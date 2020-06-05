@@ -8,8 +8,8 @@ module.exports.handler = async (event, context) => {
       email: body.email,
       pass: body.pass,
     };
-    const {result, status} = await getOne (userID, dynamoDB);
-    if (status === 'ERROR') throw result.error;
+    const {result, status, error} = await getOne (userID, dynamoDB);
+    if (status === 'ERROR') throw error;
     if (status === 'OK' && result.password === userID.pass)
       return {
         statusCode: 200,

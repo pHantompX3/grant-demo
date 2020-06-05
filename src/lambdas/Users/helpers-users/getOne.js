@@ -12,6 +12,7 @@ module.exports = async (userID, dynamoDB) => {
       .promise ();
 
     if (isEmpty (result)) {
+      console.log ('in is empty');
       throw new Error ('User does not exist!');
     }
 
@@ -20,7 +21,6 @@ module.exports = async (userID, dynamoDB) => {
       status: 'OK',
     };
   } catch (e) {
-    // console.log (e);
 
     return {
       error: e,

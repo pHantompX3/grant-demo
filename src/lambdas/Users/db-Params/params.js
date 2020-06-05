@@ -19,6 +19,8 @@ const insertParams = {
     address_line_two: body.address_line_two,
     address_parish: body.address_parish,
     address_country: body.address_country,
+    current_balance: 0.0,
+    available_balance: 0.0,
     createdAt: timestamp,
     updatedAt: timestamp,
   },

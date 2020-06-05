@@ -20,7 +20,7 @@ module.exports.handler = async (event, context) => {
     if (joiError) {
       throw joiError;
     }
-
+console.log(result);
     if (result.Count != 0) {
       throw new Error ('Email address already in use!');
     }
