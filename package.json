@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/pHantompX3/grant-demo#readme",
   "devDependencies": {
-    "serverless-offline": "^6.3.0",
-    "serverless-s3-local": "^0.6.1"
+    "serverless-offline": "^12.0.4",
+    "serverless-s3-local": "^0.6.22"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
